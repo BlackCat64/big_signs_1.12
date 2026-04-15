@@ -15,7 +15,8 @@ public class ExampleMod {
     
     public ExampleMod() {
         
-    	final ModContainer container = Loader.instance().getIndexedModList().get(MOD_ID);
-    	LOGGER.info("Loaded {} v{}", container.getName(), container.getDisplayVersion());
+//    	final ModContainer container = Loader.instance().getIndexedModList().get(MOD_ID);
+//    	LOGGER.info("Loaded {} v{}", container.getName(), container.getDisplayVersion());
+        LOGGER.info("Example Mod");
     }
 }
