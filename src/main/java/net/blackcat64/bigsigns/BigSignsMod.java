@@ -4,6 +4,7 @@ import net.blackcat64.bigsigns.block.ModBlocks;
 import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
 import net.blackcat64.bigsigns.item.ModItems;
 import net.blackcat64.bigsigns.proxy.CommonProxy;
+import net.blackcat64.bigsigns.recipes.ModRecipes;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -31,8 +32,10 @@ public class BigSignsMod
         proxy.preInit(event);
         logger = event.getModLog();
 
+        // Blocks > Items > Recipes - Order is important
         ModBlocks.init();
-        ModItems.init(); // Do Items AFTER Blocks
+        ModItems.init();
+        ModRecipes.init();
 
         GameRegistry.registerTileEntity(
                 TileEntityOneLineSign.class,
