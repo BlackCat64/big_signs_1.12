@@ -1,9 +1,12 @@
 package net.blackcat64.bigsigns;
 
+import net.blackcat64.bigsigns.proxy.CommonProxy;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
@@ -16,16 +19,23 @@ public class BigSignsMod
 
     private static Logger logger;
 
+    @SidedProxy(clientSide = "net.blackcat64.bigsigns.proxy.ClientProxy", serverSide = "net.blackcat64.bigsigns.proxy.ServerProxy")
+    public static CommonProxy proxy;
+
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
+        proxy.preInit(event);
         logger = event.getModLog();
     }
 
     @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        // some example code
-        logger.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+    public void init(FMLInitializationEvent event) {
+        proxy.init(event);
+        logger.info("Big Signs Mod loaded");
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit(event);
     }
 }
