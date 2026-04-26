@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "big_signs:one_line_sign" },
+    "facing=south": { "model": "big_signs:one_line_sign" },
+    "facing=west":  { "model": "big_signs:one_line_sign" },
+    "facing=east":  { "model": "big_signs:one_line_sign" }
+  }
+}

@@ -1,5 +1,8 @@
 package net.blackcat64.bigsigns;
 
+import net.blackcat64.bigsigns.block.ModBlocks;
+import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
+import net.blackcat64.bigsigns.item.ModItems;
 import net.blackcat64.bigsigns.proxy.CommonProxy;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
@@ -8,6 +11,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = BigSignsMod.MODID, name = BigSignsMod.NAME, version = BigSignsMod.VERSION)
@@ -26,6 +30,14 @@ public class BigSignsMod
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
         logger = event.getModLog();
+
+        ModBlocks.init();
+        ModItems.init(); // Do Items AFTER Blocks
+
+        GameRegistry.registerTileEntity(
+                TileEntityOneLineSign.class,
+                "one_line_sign"
+        );
     }
 
     @EventHandler

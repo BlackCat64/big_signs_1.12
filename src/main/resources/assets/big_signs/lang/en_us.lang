@@ -1,2 +1,3 @@
-item.test_item.name=TEST ITEM
-tile.test_block.name=TEST BLOCK
+item.one_line_sign.name=One-Line Sign
+tile.one_line_sign.name=One-Line Sign
+tile.one_line_wall_sign.name=One-Line Wall Sign
