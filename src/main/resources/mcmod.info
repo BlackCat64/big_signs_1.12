@@ -1,0 +1,11 @@
+[
+  {
+    "modid": "big_signs",
+    "name": "Big Signs (1.12 Port)",
+    "description": "Adds signs with bigger text to Minecraft",
+    "version": "1.2",
+    "mcversion": "1.12.2",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/big-signs",
+    "authorList": [ "BlackCat64" ]
+  }
+]
