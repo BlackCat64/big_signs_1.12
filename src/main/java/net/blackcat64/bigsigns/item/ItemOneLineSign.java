@@ -40,40 +40,73 @@ public class ItemOneLineSign extends Item {
     }
 
     // Copied from vanilla ItemSign class, but made generic with 'wall' and 'standing' fields
-    public EnumActionResult onItemUse(EntityPlayer p_180614_1_, World p_180614_2_, BlockPos p_180614_3_, EnumHand p_180614_4_, EnumFacing p_180614_5_, float p_180614_6_, float p_180614_7_, float p_180614_8_) {
-        IBlockState lvt_9_1_ = p_180614_2_.getBlockState(p_180614_3_);
-        boolean lvt_10_1_ = lvt_9_1_.getBlock().isReplaceable(p_180614_2_, p_180614_3_);
-        if (p_180614_5_ != EnumFacing.DOWN && (lvt_9_1_.getMaterial().isSolid() || lvt_10_1_) && (!lvt_10_1_ || p_180614_5_ == EnumFacing.UP)) {
-            p_180614_3_ = p_180614_3_.offset(p_180614_5_);
-            ItemStack lvt_11_1_ = p_180614_1_.getHeldItem(p_180614_4_);
-            if (p_180614_1_.canPlayerEdit(p_180614_3_, p_180614_5_, lvt_11_1_) && standing.canPlaceBlockAt(p_180614_2_, p_180614_3_)) {
-                if (p_180614_2_.isRemote) {
-                    return EnumActionResult.SUCCESS;
-                } else {
-                    p_180614_3_ = lvt_10_1_ ? p_180614_3_.down() : p_180614_3_;
-                    if (p_180614_5_ == EnumFacing.UP) {
-                        int lvt_12_1_ = MathHelper.floor((double)((p_180614_1_.rotationYaw + 180.0F) * 16.0F / 360.0F) + (double)0.5F) & 15;
-                        p_180614_2_.setBlockState(p_180614_3_, standing.getDefaultState().withProperty(BlockOneLineStandingSign.ROTATION, lvt_12_1_), 11);
-                    } else {
-                        p_180614_2_.setBlockState(p_180614_3_, wall.getDefaultState().withProperty(BlockOneLineWallSign.FACING, p_180614_5_), 11);
-                    }
+    public EnumActionResult onItemUse(EntityPlayer player,
+                                      World world,
+                                      BlockPos pos,
+                                      EnumHand hand,
+                                      EnumFacing facing,
+                                      float hitX,
+                                      float hitY,
+                                      float hitZ) {
 
-                    TileEntity lvt_12_2_ = p_180614_2_.getTileEntity(p_180614_3_);
-                    if (lvt_12_2_ instanceof TileEntitySign && !ItemBlock.setTileEntityNBT(p_180614_2_, p_180614_1_, p_180614_3_, lvt_11_1_)) {
-                        p_180614_1_.openEditSign((TileEntitySign)lvt_12_2_);
-                    }
+        IBlockState stateAtPos = world.getBlockState(pos);
+        boolean isReplaceable = stateAtPos.getBlock().isReplaceable(world, pos);
 
-                    if (p_180614_1_ instanceof EntityPlayerMP) {
-                        CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)p_180614_1_, p_180614_3_, lvt_11_1_);
-                    }
+        if (facing != EnumFacing.DOWN &&
+                (stateAtPos.getMaterial().isSolid() || isReplaceable) &&
+                (!isReplaceable || facing == EnumFacing.UP)) {
 
-                    lvt_11_1_.shrink(1);
+            pos = pos.offset(facing);
+            ItemStack heldItem = player.getHeldItem(hand);
+
+            if (player.canPlayerEdit(pos, facing, heldItem)
+                    && standing.canPlaceBlockAt(world, pos)) {
+                if (world.isRemote) {
                     return EnumActionResult.SUCCESS;
                 }
-            } else {
+                else {
+                    pos = isReplaceable ? pos.down() : pos;
+                    if (facing == EnumFacing.UP) {
+                        int rotation =
+                                MathHelper.floor(
+                                        (double) ((player.rotationYaw + 180.0F)
+                                                * 16.0F / 360.0F)
+                                                + 0.5D
+                                ) & 15;
+                        world.setBlockState(
+                                pos,
+                                standing.getDefaultState()
+                                        .withProperty(BlockOneLineStandingSign.ROTATION, rotation),
+                                11
+                        );
+                    } else {
+                        world.setBlockState(
+                                pos,
+                                wall.getDefaultState()
+                                        .withProperty(BlockOneLineWallSign.FACING, facing),
+                                11
+                        );
+                    }
+                    TileEntity tileEntity = world.getTileEntity(pos);
+                    if (tileEntity instanceof TileEntitySign && !ItemBlock.setTileEntityNBT(world, player, pos, heldItem)) {
+                        player.openEditSign((TileEntitySign) tileEntity);
+                    }
+                    if (player instanceof EntityPlayerMP) {
+                        CriteriaTriggers.PLACED_BLOCK.trigger(
+                                (EntityPlayerMP) player,
+                                pos,
+                                heldItem
+                        );
+                    }
+                    heldItem.shrink(1);
+                    return EnumActionResult.SUCCESS;
+                }
+            }
+            else {
                 return EnumActionResult.FAIL;
             }
-        } else {
+        }
+        else {
             return EnumActionResult.FAIL;
         }
     }
