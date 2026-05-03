@@ -104,41 +104,37 @@ public class TileEntityOneLineSignRenderer extends TileEntitySpecialRenderer<Til
         float textScale = 0.010416667F;
         textScale = textScale * 4.95F; // Match the 1.20 version of the mod - Exactly 4.5 times larger text
 
-        GlStateManager.translate(0.0F, 0.33333334F, 0.046666667F);
+        GlStateManager.translate(0.0225F, 0.33333334F, 0.046666667F);
         GlStateManager.scale(textScale, textScale * -1.0F, textScale);
 
         GlStateManager.glNormal3f(0.0F, 0.0F, textScale * -1.0F);
 
         GlStateManager.depthMask(false);
 
-        int lineIndex = 0;
+        if (destroyStage < 0) { // Only render the first line of text - ignore all other lines
+            if (tileEntity.signText[0] != null) {
 
-        if (destroyStage < 0) {
+                ITextComponent textComponent = tileEntity.signText[0];
 
-            for (int i = 0; i < tileEntity.signText.length; ++i) {
+                // Maximum width of characters on each line - so that text doesn't overflow off the sign
+                final int maxLineLength = 20;
+                List<ITextComponent> splitText =
+                        GuiUtilRenderComponents.splitText(textComponent, maxLineLength, fontRenderer, false, true);
 
-                if (tileEntity.signText[i] != null) {
+                String lineText = splitText != null && !splitText.isEmpty()
+                        ? splitText.get(0).getFormattedText()
+                        : "";
 
-                    ITextComponent textComponent = tileEntity.signText[i];
-
-                    List<ITextComponent> splitText =
-                            GuiUtilRenderComponents.splitText(textComponent, 90, fontRenderer, false, true);
-
-                    String lineText = splitText != null && !splitText.isEmpty()
-                            ? splitText.get(0).getFormattedText()
-                            : "";
-
-                    if (i == tileEntity.lineBeingEdited) {
-                        lineText = "> " + lineText + " <";
-                    }
-
-                    fontRenderer.drawString(
-                            lineText,
-                            -fontRenderer.getStringWidth(lineText) / 2,
-                            -4,
-                            0
-                    );
+                if (tileEntity.lineBeingEdited == 0) {
+                    lineText = "> " + lineText + " <";
                 }
+
+                fontRenderer.drawString(
+                        lineText,
+                        -fontRenderer.getStringWidth(lineText) / 2,
+                        -4,
+                        0
+                );
             }
         }
 
