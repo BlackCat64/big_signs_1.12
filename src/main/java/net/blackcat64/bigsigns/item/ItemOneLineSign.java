@@ -1,7 +1,9 @@
 package net.blackcat64.bigsigns.item;
 
+import net.blackcat64.bigsigns.BigSignsMod;
 import net.blackcat64.bigsigns.block.BlockOneLineStandingSign;
 import net.blackcat64.bigsigns.block.BlockOneLineWallSign;
+import net.blackcat64.bigsigns.network.PacketOpenOneLineSignGui;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStandingSign;
@@ -88,8 +90,15 @@ public class ItemOneLineSign extends Item {
                         );
                     }
                     TileEntity tileEntity = world.getTileEntity(pos);
-                    if (tileEntity instanceof TileEntitySign && !ItemBlock.setTileEntityNBT(world, player, pos, heldItem)) {
-                        player.openEditSign((TileEntitySign) tileEntity);
+                    if (tileEntity instanceof TileEntitySign
+                            && !ItemBlock.setTileEntityNBT(world, player, pos, heldItem)
+                            && player instanceof EntityPlayerMP) {
+                        ((TileEntitySign) tileEntity).setPlayer(player);
+                        System.out.println("Sending OpenOneLineSignGUI packet to client");
+                        BigSignsMod.NETWORK.sendTo(
+                                new PacketOpenOneLineSignGui(pos),
+                                (EntityPlayerMP) player
+                        );
                     }
                     if (player instanceof EntityPlayerMP) {
                         CriteriaTriggers.PLACED_BLOCK.trigger(

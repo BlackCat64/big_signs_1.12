@@ -1,7 +1,10 @@
 package net.blackcat64.bigsigns.gui;
 
 
+import net.blackcat64.bigsigns.BigSignsMod;
 import net.blackcat64.bigsigns.block.ModBlocks;
+import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
+import net.blackcat64.bigsigns.network.PacketUpdateOneLineSign;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,12 +26,12 @@ import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
 public class GuiEditOneLineSign extends GuiEditSign {
-    private final TileEntitySign tileSign;
+    private final TileEntityOneLineSign tileSign;
     private int updateCounter;
     private static final int EDIT_LINE = 0;
     private GuiButton doneBtn;
 
-    public GuiEditOneLineSign(TileEntitySign tileEntitySign) {
+    public GuiEditOneLineSign(TileEntityOneLineSign tileEntitySign) {
         super(tileEntitySign);
         this.tileSign = tileEntitySign;
     }
@@ -44,10 +47,9 @@ public class GuiEditOneLineSign extends GuiEditSign {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-        NetHandlerPlayClient client = this.mc.getConnection();
-        if (client != null) {
-            client.sendPacket(new CPacketUpdateSign(this.tileSign.getPos(), this.tileSign.signText));
-        }
+        System.out.println("Sending sign update packet: '" + this.tileSign.signText[0] + "'");
+
+        BigSignsMod.NETWORK.sendToServer(new PacketUpdateOneLineSign(this.tileSign.getPos(), this.tileSign.signText[0]));
 
         this.tileSign.setEditable(true);
     }

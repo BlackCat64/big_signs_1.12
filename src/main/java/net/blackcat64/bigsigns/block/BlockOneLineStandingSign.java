@@ -1,14 +1,17 @@
 package net.blackcat64.bigsigns.block;
 
+import net.blackcat64.bigsigns.BigSignsMod;
 import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
 import net.blackcat64.bigsigns.gui.GuiEditOneLineSign;
 import net.blackcat64.bigsigns.item.ModItems;
+import net.blackcat64.bigsigns.network.PacketOpenOneLineSignGui;
 import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -49,12 +52,16 @@ public class BlockOneLineStandingSign extends BlockStandingSign {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
+            return true;
+        }
+        else {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
             if (tileEntity instanceof TileEntityOneLineSign) {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiEditOneLineSign((TileEntityOneLineSign) tileEntity));
+                BigSignsMod.NETWORK.sendTo(new PacketOpenOneLineSignGui(pos),
+                        (EntityPlayerMP) playerIn
+                );
             }
             return true;
         }
-        return true;
     }
 }
