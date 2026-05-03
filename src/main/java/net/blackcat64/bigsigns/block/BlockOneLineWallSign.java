@@ -1,13 +1,18 @@
 package net.blackcat64.bigsigns.block;
 
 import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
+import net.blackcat64.bigsigns.gui.GuiEditOneLineSign;
 import net.blackcat64.bigsigns.item.ModItems;
 import net.minecraft.block.BlockWallSign;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -20,6 +25,7 @@ public class BlockOneLineWallSign extends BlockWallSign {
         setUnlocalizedName("one_line_wall_sign");
         setHardness(1.0f);
         setResistance(1.0f);
+        setSoundType(SoundType.WOOD);
 
         ModBlocks.BLOCKS.add(this);
     }
@@ -37,5 +43,17 @@ public class BlockOneLineWallSign extends BlockWallSign {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntityOneLineSign();
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (worldIn.isRemote) {
+            TileEntity tileEntity = worldIn.getTileEntity(pos);
+            if (tileEntity instanceof TileEntityOneLineSign) {
+                Minecraft.getMinecraft().displayGuiScreen(new GuiEditOneLineSign((TileEntityOneLineSign) tileEntity));
+            }
+            return true;
+        }
+        return true;
     }
 }

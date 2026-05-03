@@ -80,7 +80,7 @@ public class GuiEditOneLineSign extends GuiEditSign {
             text = text.substring(0, text.length() - 1);
         }
 
-        if (ChatAllowedCharacters.isAllowedCharacter(keyChar) && this.fontRenderer.getStringWidth(text + keyChar) <= 90) {
+        if (ChatAllowedCharacters.isAllowedCharacter(keyChar) && this.fontRenderer.getStringWidth(text + keyChar) <= 20) {
             text = text + keyChar;
         }
 
