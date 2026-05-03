@@ -7,7 +7,6 @@ import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.model.ModelSign;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -117,6 +116,7 @@ public class TileEntityOneLineSignRenderer extends TileEntitySpecialRenderer<Til
                 ITextComponent textComponent = tileEntity.signText[0];
 
                 // Maximum width of characters on each line - so that text doesn't overflow off the sign
+                // 20 is enough for 10 '|' characters
                 final int maxLineLength = 20;
                 List<ITextComponent> splitText =
                         GuiUtilRenderComponents.splitText(textComponent, maxLineLength, fontRenderer, false, true);

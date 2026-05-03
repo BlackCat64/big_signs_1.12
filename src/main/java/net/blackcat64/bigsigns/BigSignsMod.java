@@ -5,7 +5,6 @@ import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
 import net.blackcat64.bigsigns.item.ModItems;
 import net.blackcat64.bigsigns.proxy.CommonProxy;
 import net.blackcat64.bigsigns.recipes.ModRecipes;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
