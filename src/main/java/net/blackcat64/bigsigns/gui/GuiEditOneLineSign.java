@@ -47,7 +47,6 @@ public class GuiEditOneLineSign extends GuiEditSign {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-        System.out.println("Sending sign update packet: '" + this.tileSign.signText[0] + "'");
 
         BigSignsMod.NETWORK.sendToServer(new PacketUpdateOneLineSign(this.tileSign.getPos(), this.tileSign.signText[0]));
 
@@ -109,6 +108,7 @@ public class GuiEditOneLineSign extends GuiEditSign {
 
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         Block signBlock = this.tileSign.getBlockType();
+
         if (signBlock == ModBlocks.ONE_LINE_STANDING_SIGN) {
             float lvt_6_1_ = (float)(this.tileSign.getBlockMetadata() * 360) / 16.0F;
             GlStateManager.rotate(lvt_6_1_, 0.0F, 1.0F, 0.0F);
@@ -137,7 +137,8 @@ public class GuiEditOneLineSign extends GuiEditSign {
             this.tileSign.lineBeingEdited = EDIT_LINE;
         }
 
-        TileEntityRendererDispatcher.instance.render(this.tileSign, (double)-0.5F, (double)-0.75F, (double)-0.5F, 0.0F);
+        // Force an alpha value >100 to render the edit screen correctly
+        TileEntityRendererDispatcher.instance.render(this.tileSign, -0.5F, -0.75F, -0.5F, 0.0F, 0, 1.0f);
         this.tileSign.lineBeingEdited = -1;
         GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);

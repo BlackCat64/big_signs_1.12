@@ -1,26 +1,28 @@
 package net.blackcat64.bigsigns.renderer;
 
 import net.blackcat64.bigsigns.block.ModBlocks;
+import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
+import net.blackcat64.bigsigns.gui.GuiEditOneLineSign;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.model.ModelSign;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
 
-public class TileEntityOneLineSignRenderer extends TileEntitySpecialRenderer<TileEntitySign> {
+public class TileEntityOneLineSignRenderer extends TileEntitySpecialRenderer<TileEntityOneLineSign> {
     private static final ResourceLocation SIGN_TEXTURE = new ResourceLocation("textures/entity/sign.png");
     private final ModelSign model = new ModelSign();
 
     public TileEntityOneLineSignRenderer() {
     }
 
-    public void render(TileEntitySign tileEntity,
+    public void render(TileEntityOneLineSign tileEntity,
                        double x,
                        double y,
                        double z,
@@ -32,6 +34,8 @@ public class TileEntityOneLineSignRenderer extends TileEntitySpecialRenderer<Til
 
         GlStateManager.pushMatrix();
 
+        boolean isEditing = Minecraft.getMinecraft().currentScreen instanceof GuiEditOneLineSign;
+
         if (block == ModBlocks.ONE_LINE_STANDING_SIGN) {
 
             GlStateManager.translate((float) x + 0.5F,
@@ -39,11 +43,19 @@ public class TileEntityOneLineSignRenderer extends TileEntitySpecialRenderer<Til
                     (float) z + 0.5F);
 
             float rotation = (float) (tileEntity.getBlockMetadata() * 360) / 16.0F;
-            GlStateManager.rotate(-rotation, 0.0F, 1.0F, 0.0F);
+
+            // specific rotations need to be corrected while editing for some reason
+            if (!isEditing || rotation == 90.0F)
+                GlStateManager.rotate(-rotation, 0.0F, 1.0F, 0.0F);
+            else if (rotation == 45.0F)
+                GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+            else if (rotation == 112.5F)
+                GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
 
             this.model.signStick.showModel = true;
 
-        } else if (block == ModBlocks.ONE_LINE_WALL_SIGN) {
+        }
+        else if (block == ModBlocks.ONE_LINE_WALL_SIGN) {
 
             int meta = tileEntity.getBlockMetadata();
             float facingRotation = 0.0F;

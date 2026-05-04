@@ -36,21 +36,16 @@ public class PacketOpenOneLineSignGui implements IMessage {
     public static class Handler implements IMessageHandler<PacketOpenOneLineSignGui, IMessage> {
         @Override
         public IMessage onMessage(PacketOpenOneLineSignGui message, MessageContext ctx) {
-            System.out.println("Open OneLineSign GUI packet received");
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 BlockPos pos = message.pos;
                 TileEntity tileEntity = Minecraft.getMinecraft().world.getTileEntity(pos);
 
                 if (!(tileEntity instanceof TileEntityOneLineSign))
                 {
-                    System.out.println("Creating tile entity");
                     tileEntity = new TileEntityOneLineSign();
                     tileEntity.setWorld(Minecraft.getMinecraft().world);
                     tileEntity.setPos(message.pos);
                 }
-                else System.out.println("Retrieved tile entity");
-
-                System.out.println("Opening GUI");
                 Minecraft.getMinecraft().displayGuiScreen(new GuiEditOneLineSign((TileEntityOneLineSign) tileEntity));
             });
             return null;

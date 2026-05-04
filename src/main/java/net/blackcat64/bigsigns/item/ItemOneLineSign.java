@@ -94,7 +94,6 @@ public class ItemOneLineSign extends Item {
                             && !ItemBlock.setTileEntityNBT(world, player, pos, heldItem)
                             && player instanceof EntityPlayerMP) {
                         ((TileEntitySign) tileEntity).setPlayer(player);
-                        System.out.println("Sending OpenOneLineSignGUI packet to client");
                         BigSignsMod.NETWORK.sendTo(
                                 new PacketOpenOneLineSignGui(pos),
                                 (EntityPlayerMP) player
