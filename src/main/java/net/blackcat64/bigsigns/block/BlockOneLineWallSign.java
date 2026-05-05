@@ -50,6 +50,9 @@ public class BlockOneLineWallSign extends BlockWallSign {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!playerIn.isSneaking() || !playerIn.getHeldItemMainhand().isEmpty())
+            return false;
+
         if (worldIn.isRemote) {
             return true;
         }
