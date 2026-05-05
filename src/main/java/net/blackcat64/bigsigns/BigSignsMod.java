@@ -2,11 +2,13 @@ package net.blackcat64.bigsigns;
 
 import net.blackcat64.bigsigns.block.ModBlocks;
 import net.blackcat64.bigsigns.block.entity.TileEntityOneLineSign;
+import net.blackcat64.bigsigns.handlers.SignInteractHandler;
 import net.blackcat64.bigsigns.item.ModItems;
 import net.blackcat64.bigsigns.network.PacketOpenOneLineSignGui;
 import net.blackcat64.bigsigns.network.PacketUpdateOneLineSign;
 import net.blackcat64.bigsigns.proxy.CommonProxy;
 import net.blackcat64.bigsigns.recipes.ModRecipes;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -61,6 +63,8 @@ public class BigSignsMod
                 2,
                 Side.SERVER
         );
+
+        MinecraftForge.EVENT_BUS.register(new SignInteractHandler());
     }
 
     @EventHandler

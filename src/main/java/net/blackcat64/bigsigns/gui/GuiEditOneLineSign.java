@@ -137,7 +137,6 @@ public class GuiEditOneLineSign extends GuiEditSign {
             this.tileSign.lineBeingEdited = EDIT_LINE;
         }
 
-        // Force an alpha value >100 to render the edit screen correctly
         TileEntityRendererDispatcher.instance.render(this.tileSign, -0.5F, -0.75F, -0.5F, 0.0F, 0, 1.0f);
         this.tileSign.lineBeingEdited = -1;
         GlStateManager.popMatrix();
